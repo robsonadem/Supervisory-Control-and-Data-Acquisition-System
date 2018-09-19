@@ -1,0 +1,65 @@
+StateTable
+(	StateId		INTEGER PRIMARY KEY AUTOINCREMENT, 
+	StateName 	TEXT UNIQUE NOT NULL);
+*
+(StateName)
+
+BranchTable
+(	BranchId 	INTEGER PRIMARY KEY AUTOINCREMENT,
+	FromState 	TEXT,
+	ToState 	TEXT,
+	Condition 	TEXT NOT NULL,
+	FOREIGN KEY(FromState) REFERENCES StateTable (StateName) ON UPDATE CASCADE ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(ToState) REFERENCES StateTable (StateName) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(FromState, ToState, Condition)
+
+SensorTable
+(	SensorId 	TEXT PRIMARY KEY, 
+	HubID 		INT NOT NULL, 
+	PortNumber 	INT NOT NULL, 
+	SensorType 	TEXT,
+	UNIQUE (HubID, PortNumber));
+*
+(SensorId, HubID, PortNumber, SensorType)
+
+CalConfTable
+(	ModelNumber 	INTEGER PRIMARY KEY AUTOINCREMENT,	
+	SensorId  	TEXT,
+	StateName 	TEXT,
+	Calibration 	TEXT NOT NULL,  
+	UNIQUE (SensorId, StateName),
+	FOREIGN KEY (StateName) REFERENCES StateTable (StateName) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (SensorId) REFERENCES SensorTable (SensorId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SensorId,StateName,Calibration)
+
+SampleTable
+(	SampleId    	INTEGER PRIMARY KEY AUTOINCREMENT, 
+	SensorId   	TEXT NOT NULL,
+	TimeStamp   	INTEGER NOT NULL, 
+	RawData    	INTEGER NOT NULL,
+	FOREIGN KEY (SensorId) REFERENCES SensorTable (SensorId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SensorId,TimeStamp,RawData)
+
+CalibratedSampleTable
+(	CalId 		INTEGER PRIMARY KEY AUTOINCREMENT, 
+	SampleId 	INTEGER, 
+	CalTimeStamp 	INTEGER NOT NULL, 
+	CalVal 		INTEGER NOT NULL, 
+	ModelNumber 	INTEGER NOT NULL,  
+	FOREIGN KEY (SampleId) REFERENCES SampleTable (SampleId) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (ModelNumber) REFERENCES CalConfTable (ModelNumber) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SampleId, CalTimeStamp, CalVal, ModelNumber)
+
+SensorConfTable
+(	SensorConfId 	INTEGER PRIMARY KEY AUTOINCREMENT,
+        SensorId   	TEXT,
+	StateName       TEXT,
+	SampleRate   	TEXT,
+	FOREIGN KEY (StateName) REFERENCES StateTable (StateName) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (SensorId) REFERENCES SensorTable (SensorId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SensorId,StateName,SampleRate)

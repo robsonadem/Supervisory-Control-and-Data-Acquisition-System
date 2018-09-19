@@ -1,0 +1,59 @@
+StateTable
+(	StateId 	INTEGER PRIMARY KEY AUTOINCREMENT, 
+	StateName 	TEXT NOT NULL)
+*
+(StateName)
+
+BranchTable
+(	BranchId	INTEGER PRIMARY KEY AUTOINCREMENT,
+	FromState 	INT,
+	ToState 	INT,
+	FOREIGN KEY (FromState) REFERENCES StateTable (StateId) ON UPDATE CASCADE ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (ToState) REFERENCES StateTable (StateId) ON UPDATE CASCADE ON DELETE CASCADE)
+*
+(FromState, ToState)
+
+ConditionTable
+(	ConditionId	INTEGER PRIMARY KEY AUTOINCREMENT,	
+	BranchId INT,	Condition TEXT NOT NULL,	
+	FOREIGN KEY (BranchId) REFERENCES BranchTable (BranchId) ON UPDATE CASCADE ON DELETE CASCADE)
+*
+(BranchId, Condition)
+
+CalConfTable
+(	ModelNumber 	INTEGER PRIMARY KEY AUTOINCREMENT,	
+	StateId 	INT, 
+	Type 		TEXT NOT NULL, 
+	Coefficient 	TEXT NOT NULL, 
+	FOREIGN KEY (StateId) REFERENCES StateTable (StateId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(StateId, Type, Coefficient)
+
+SensorTable
+(	SensorId 	INTEGER PRIMARY KEY AUTOINCREMENT, 
+	HubID 		INT NOT NULL, 
+	PortNumber 	INT NOT NULL, 
+	SensorType 	TEXT,
+	UNIQUE(HubID,PortNumber));
+*
+(HubID, PortNumber, SensorType)
+
+SampleTable
+(	SampleId 	INTEGER PRIMARY KEY AUTOINCREMENT, 
+	SensorId 	INT,
+	TimeStamp 	TEXT NOT NULL, 
+	RawData 	TEXT NOT NULL, 
+	FOREIGN KEY (SensorId) REFERENCES SensorTable (SensorId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SensorId,TimeStamp, RawData)
+
+CalibratedSampleTable
+(	CalId 		INTEGER PRIMARY KEY AUTOINCREMENT, 
+	SampleId 	INT, 
+	CalTimeStamp 	TEXT NOT NULL, 
+	CalVal 		INT NOT NULL, 
+	ModelNumber 	INT NOT NULL, 
+	MarkToDelete 	INT NOT NULL, 
+	FOREIGN KEY (SampleId) REFERENCES SampleTable (SampleId) ON UPDATE CASCADE ON DELETE CASCADE);
+*
+(SampleId, CalibrationTimeStamp, CalVal, ModelNumber, MarkToDelete)

@@ -1,0 +1,10 @@
+#STATES
+STATES:
+Idle,Run,Warn,Count,Jump,Shout
+#BRANCHES
+BRANCHES:
+Idle,Run,'s0’:Select RawData from SampleTable where RawData > 0
+Run,Shout,'s1':Select RawData from SampleTable where RawData > 100
+Shout,Warn,'s2':Select RawData from SampleTable where RawData > 120
+Warn,Run,'s3':Select RawData from SampleTable where RawData > 140
+Run,Run,'s0':Select RawData from SampleTable where RawData < 30

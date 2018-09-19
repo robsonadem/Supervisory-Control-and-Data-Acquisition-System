@@ -1,0 +1,29 @@
+#STATE syntax-> <STATE_1_Name>,<STATE_2_Name>,<STATE_3_Name> 
+STATES:
+IDLE,RUN,STOP, LOL
+#BRANCH syntax-> <STATE_FROM>,<STATE_TO>,<CONDITION>
+#where <CONDITION> is <SENSOR_ID: SQL QUERY>
+BRANCHES:
+IDLE,RUN,s0:Select RawData from SampleTable where RawData > 1
+RUN,STOP,s1:Select RawData from SampleTable where RawData > 3
+STOP,IDLE,s1:Select RawData from SampleTable where RawData < 2
+#SENSORS syntax-> <HUB_ID>,<PORT_NO>,<SENSOR_ID>
+SENSORS:
+4971941,1,s0
+4953315,5,s1
+#CALIBRATION syntax-> <SENSOR_ID>,<STATE_NAME>,<CALIBRATION> 
+#where <CALIBRATION> is <type:coeffs listed with colon >
+CALIBRATION:
+s0,IDLE,linear:2:1
+s1,IDLE,linear:2:1
+s0,RUN,linear:2:1
+s1,RUN,linear:2:1
+s0,STOP,quad:2:3:1
+#COLLECTION syntax-> <SENSOR_ID>,<STATE_NAME>,<SAMPLING_PERIOD> 
+COLLECTION:
+s0,IDLE,2000
+s1,IDLE,2000
+s0,RUN,750
+s1,RUN,750
+s0,STOP,750
+END

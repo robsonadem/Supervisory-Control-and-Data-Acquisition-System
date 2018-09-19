@@ -1,0 +1,20 @@
+#STATES
+STATES:
+<<<<<<< HEAD
+IDLE,RUN,STOP,FINISH
+#BRANCH syntax-> STATE_FROM,STATE_TO,CONDITION 
+BRANCHES:
+IDLE,RUN,s0:Select RawData from SampleTable where RawData > 60
+#RUN,STOP,s0:Select RawData from SampleTable where RawData > 60
+#STOP,FINISH,s0:Select RawData from SampleTable where RawData > 60
+SENSORS:
+124332,0,sensor1
+CALIBRATION:
+s1,IDLE,quad:2:3:4
+=======
+Idle,Run,Warn,Count,Jump,Shout, FUCME, HELLO
+#BRANCHES
+BRANCHES:
+Idle,Run,s0:Select RawData from SampleTable where RawData > 0
+>>>>>>> refs/remotes/origin/master
+END

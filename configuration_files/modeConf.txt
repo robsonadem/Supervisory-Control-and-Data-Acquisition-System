@@ -1,0 +1,9 @@
+#STATE syntax->List all your states’ name with space in between-> STATE_1_Name STATE_2_Name STATE_3_Name 
+STATES:
+IDLE,RUN,STOP,FINISH
+#BRANCH syntax-> STATE_FROM,STATE_TO,CONDITION 
+BRANCHES:
+IDLE,RUN,s0:Select RawData from SampleTable where RawData > 60
+RUN,STOP,s0:Select RawData from SampleTable where RawData > 60
+STOP,FINISH,s0:Select RawData from SampleTable where RawData > 60
+END
